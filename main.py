@@ -3,6 +3,7 @@ import os
 import time
 import pyttsx3
 
+
 # ADD SOME COLOR: https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal
 class bcolors:
     HEADER = '\033[95m'
@@ -15,6 +16,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
 # USEFUL HELPER FUNCTIONS
 def task_display_time_remain(task_name, end_time):
     present = datetime.datetime.now()
@@ -23,16 +25,25 @@ def task_display_time_remain(task_name, end_time):
     difference = future - present
     return [task_name, difference]
 
+
 def clear_console():
     command = 'clear'
     if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
         command = 'cls'
     os.system(command)
 
+
+def add_sound(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+
 # THE MEAT OF THE PROBLEM
 class Schedule:
     def __init__(self):
         self.tasks = []
+        self.to_speak = ""
         self.current_status = []
         self.n_of_tasks = 0
 
@@ -60,23 +71,29 @@ class Schedule:
         to_show = ""
         for task in self.current_status:
             to_show = f"{bcolors.FAIL}{to_show} TASK NAME: {task[0]}{bcolors.ENDC} | {bcolors.OKBLUE}TIME REMAINING: {str(task[1])}{bcolors.ENDC} \n"
+            if (task[1] <=
+                datetime.timedelta(minutes=5)) or (task[1] <= datetime.timedelta(minutes=10)) or (
+                    task[1] <= datetime.timedelta(minutes=15)):
+                self.to_speak = f" TASK NAME: {task[0]} TIME REMAINING: {str(task[1])}"
         return to_show
 
     def countdown(self):
         while self.n_of_tasks > 0:
             self.do_countdown()
             print(self)
-            self.add_sound(self.__str__())
+            self.speak_now()
             time.sleep(1)
             clear_console()
 
-    def add_sound(self, text):
-        engine = pyttsx3.init()
-        engine.say(text)
-        engine.runAndWait()
+    def speak_now(self):
+        if self.to_speak != "":
+            add_sound(self.to_speak)
+
 
 # THE USUAL
 if __name__ == "__main__":
     today = Schedule()
     today.add_task("Discussion Signup", [2022, 1, 17, 12, 0, 0])
+    today.add_task("On-Campus Book Return", [2022, 1, 17, 17, 0, 0])
+    today.add_task("Tennis Australian Open", [2022, 1, 17, 22, 0, 0])
     today.countdown()
