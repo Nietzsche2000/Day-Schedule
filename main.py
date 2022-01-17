@@ -36,7 +36,8 @@ def clear_console():
 
 def add_sound(text):
     engine = pyttsx3.init()
-    engine.setProperty('voice', 'com.apple.speech.synthesis.voice.karen')
+    # engine.setProperty('voice', 'com.apple.speech.synthesis.voice.karen') # MAC
+    engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0') # WINDOWS
     engine.say(text)
     engine.runAndWait()
 
@@ -90,7 +91,7 @@ class Schedule:
             self.do_countdown()
             self.delete_comp_task()
             print(self)
-            # self.speak_now()
+            self.speak_now()
             time.sleep(1)
             clear_console()
             self.reset()
