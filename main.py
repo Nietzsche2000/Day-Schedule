@@ -1,6 +1,7 @@
 import datetime
 import os
 import time
+import pyttsx3
 
 # ADD SOME COLOR: https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal
 class bcolors:
@@ -58,16 +59,21 @@ class Schedule:
     def __str__(self):
         to_show = ""
         for task in self.current_status:
-            to_show = f"{bcolors.FAIL}{to_show} TASK NAME: {task[0]}{bcolors.ENDC} | {bcolors.OKGREEN}TIME REMAINING: {str(task[1])}{bcolors.ENDC} \n"
+            to_show = f"{bcolors.FAIL}{to_show} TASK NAME: {task[0]}{bcolors.ENDC} | {bcolors.OKBLUE}TIME REMAINING: {str(task[1])}{bcolors.ENDC} \n"
         return to_show
 
     def countdown(self):
         while self.n_of_tasks > 0:
             self.do_countdown()
             print(self)
+            self.add_sound(self.__str__())
             time.sleep(1)
             clear_console()
 
+    def add_sound(self, text):
+        engine = pyttsx3.init()
+        engine.say(text)
+        engine.runAndWait()
 
 # THE USUAL
 if __name__ == "__main__":
