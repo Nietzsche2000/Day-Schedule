@@ -80,9 +80,9 @@ class Schedule:
         to_show = ""
         for task in self.current_status:
             to_show = f"{to_show} {bcolors.FAIL} TASK NAME: {task[0]}{bcolors.ENDC} | {bcolors.OKBLUE}TIME REMAINING: {task[1]} {bcolors.ENDC} \n"
-            # if (task[1] <=
-            #     datetime.timedelta(minutes=5)) or (task[1] <= datetime.timedelta(minutes=10)) or (
-            #         task[1] <= datetime.timedelta(minutes=15)):
+            if (task[1] <=
+                datetime.timedelta(minutes=5)) or (task[1] <= datetime.timedelta(minutes=10)) or (
+                    task[1] <= datetime.timedelta(minutes=15)):
             self.to_speak.append(f" TASK NAME: {task[0]} TIME REMAINING: {str(task[1])}")
         return to_show
 
