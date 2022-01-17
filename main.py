@@ -36,7 +36,7 @@ def clear_console():
 
 def add_sound(text):
     engine = pyttsx3.init()
-    engine.setProperty('voice', 'com.apple.speech.synthesis.voice.Victoria')
+    engine.setProperty('voice', 'com.apple.speech.synthesis.voice.karen')
     engine.say(text)
     engine.runAndWait()
 
@@ -53,18 +53,22 @@ class Schedule:
         self.tasks.append([task_name, end_time])
         self.n_of_tasks += 1
 
+    # FROM SELF.TASKS NOT SELF.CURRENT_STATUS
     def remove_task(self, task_name):
         for task in self.tasks:
-            if task[0] == task:
+            if task[0] == task_name:
                 self.tasks.remove(task)
                 self.n_of_tasks -= 1
         print(task_name + " TIME UP ")
 
     def delete_comp_task(self):
+        curr_stat_dup = list(self.current_status)
         for task in self.current_status:
-            if task[1] <= 0:
+            if task[1].days < 0:
                 print("DELETED TASK " + task[0])
-                self.remove_task(task)
+                self.remove_task(task[0])
+                curr_stat_dup.remove(task)
+        self.current_status = curr_stat_dup
 
     def do_countdown(self):
         self.current_status = [task_display_time_remain(task[0], task[1]) for task in self.tasks]
@@ -74,7 +78,6 @@ class Schedule:
     def __str__(self):
         to_show = ""
         for task in self.current_status:
-            compar = datetime.datetime(2000, 1, 1, 1, 1, 1, 1) + task[1]  # ADDING FOR EASY, DANGER!!
             to_show = f"{to_show} {bcolors.FAIL} TASK NAME: {task[0]}{bcolors.ENDC} | {bcolors.OKBLUE}TIME REMAINING: {task[1]} {bcolors.ENDC} \n"
             if (task[1] <=
                 datetime.timedelta(minutes=5)) or (task[1] <= datetime.timedelta(minutes=10)) or (
@@ -85,8 +88,9 @@ class Schedule:
     def countdown(self):
         while self.n_of_tasks > 0:
             self.do_countdown()
+            self.delete_comp_task()
             print(self)
-            self.speak_now()
+            # self.speak_now()
             time.sleep(1)
             clear_console()
             self.reset()
