@@ -36,6 +36,7 @@ def clear_console():
 
 def add_sound(text):
     engine = pyttsx3.init()
+    engine.setProperty('voice', 'com.apple.speech.synthesis.voice.samantha')
     engine.say(text)
     engine.runAndWait()
 
