@@ -62,7 +62,7 @@ class Schedule:
         for task in self.current_status:
             if task[1] <= 0:
                 print("DELETED TASK " + task[0])
-                self.remove_task(task[0])
+                self.remove_task(task)
 
     def do_countdown(self):
         self.current_status = [task_display_time_remain(task[0], task[1]) for task in self.tasks]
