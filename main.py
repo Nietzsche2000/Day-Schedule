@@ -36,19 +36,21 @@ def clear_console():
 
 def add_sound(text):
     engine = pyttsx3.init()
-    engine.setProperty('voice', 'com.apple.speech.synthesis.voice.karen') # MAC
-    # engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0') # WINDOWS
+    # engine.setProperty('voice', 'com.apple.speech.synthesis.voice.karen') # MAC
+    engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0') # WINDOWS
     engine.say(text)
     engine.runAndWait()
 
 
 # THE MEAT OF THE PROBLEM
 class Schedule:
-    def __init__(self):
+    def __init__(self, person_name, description):
         self.tasks = []
         self.to_speak = []
         self.current_status = []
         self.n_of_tasks = 0
+        self.person_name = person_name
+        self.description = description
 
     def add_task(self, task_name, end_time):
         self.tasks.append([task_name, end_time])
@@ -77,14 +79,13 @@ class Schedule:
         self.current_status = sorted(self.current_status, key=lambda task: task[1])
 
     def __str__(self):
+        m_data = f" {bcolors.OKGREEN}NAME: {self.person_name}{bcolors.ENDC}\n {bcolors.OKGREEN}DESCRIPTION: {self.description}{bcolors.ENDC} \n\n"
         to_show = ""
         for task in self.current_status:
-            to_show = f"{to_show} {bcolors.FAIL} TASK NAME: {task[0]}{bcolors.ENDC} | {bcolors.OKBLUE}TIME REMAINING: {task[1]} {bcolors.ENDC} \n"
-            if (task[1] <=
-                datetime.timedelta(minutes=5)) or (task[1] <= datetime.timedelta(minutes=10)) or (
-                    task[1] <= datetime.timedelta(minutes=15)):
+            to_show = f"{to_show} {bcolors.WARNING} TASK NAME: {bcolors.ENDC}{bcolors.BOLD}{task[0]}{bcolors.ENDC} | {bcolors.FAIL}TIME REMAINING: {task[1]} {bcolors.ENDC} \n"
+            if task[1] <= datetime.timedelta(minutes=5):
                 self.to_speak.append(f" TASK NAME: {task[0]} TIME REMAINING: {str(task[1])}")
-        return to_show
+        return m_data + to_show
 
     def countdown(self):
         while self.n_of_tasks > 0:
@@ -107,8 +108,11 @@ class Schedule:
 
 # THE USUAL
 if __name__ == "__main__":
-    today = Schedule()
-    today.add_task("On-Campus Book Return", [2022, 1, 17, 17, 0, 0])
-    today.add_task("Tennis Australian Open", [2022, 1, 17, 22, 0, 0])
-    today.add_task("Discussion Signup", [2022, 1, 17, 12, 0, 0])
+    today = Schedule("MONISHWARAN MAHESWARAN", "SPRING 2022 WORK SCHEDULE")
+    # today.add_task("On-Campus Book Return", [2022, 1, 17, 17, 0, 0])
+    # today.add_task("Tennis Australian Open", [2022, 1, 17, 22, 0, 0])
+    # today.add_task("Discussion Signup", [2022, 1, 17, 12, 0, 0])
+    today.add_task("CS70 HW 0", [2022, 1, 17, 23, 59, 59])
+    today.add_task("DATA C104 Syllabi", [2022, 1, 17, 23, 59, 59])
+    today.add_task("YC 2022 APP", [2022, 1, 31, 23, 59, 59])
     today.countdown()
