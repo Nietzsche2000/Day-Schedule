@@ -2,6 +2,7 @@ import datetime
 import os
 import time
 import pyttsx3
+import tqdm
 from operator import attrgetter
 
 
@@ -79,13 +80,17 @@ class Schedule:
         self.current_status = sorted(self.current_status, key=lambda task: task[1])
 
     def __str__(self):
-        m_data = f" {bcolors.OKGREEN}NAME: {self.person_name}{bcolors.ENDC}\n {bcolors.OKGREEN}DESCRIPTION: {self.description}{bcolors.ENDC} \n\n"
+        m_data = f" {bcolors.OKGREEN}NAME: {self.person_name}{bcolors.ENDC}\n {bcolors.OKGREEN}DESCRIPTION: {self.description}{bcolors.ENDC}"
         to_show = ""
+        curr_time = f" {bcolors.OKCYAN}CURRENT TIME: {datetime.datetime.now()}{bcolors.ENDC}"
+        i = 1
         for task in self.current_status:
-            to_show = f"{to_show} {bcolors.WARNING} TASK NAME: {bcolors.ENDC}{bcolors.BOLD}{task[0]}{bcolors.ENDC} | {bcolors.FAIL}TIME REMAINING: {task[1]} {bcolors.ENDC} \n"
+            to_show = f"{to_show} {bcolors.WARNING} {i}. TASK NAME: {bcolors.ENDC}{bcolors.BOLD}{task[0]}{bcolors.ENDC} | {bcolors.FAIL}TIME REMAINING: {task[1]} {bcolors.ENDC} \n"
             if task[1] <= datetime.timedelta(minutes=5):
                 self.to_speak.append(f" TASK NAME: {task[0]} TIME REMAINING: {str(task[1])}")
-        return m_data + to_show
+            # self.progress_bar()
+            i += 1
+        return m_data + "\n" + curr_time  + "\n\n" + to_show
 
     def countdown(self):
         while self.n_of_tasks > 0:
@@ -93,7 +98,7 @@ class Schedule:
             self.delete_comp_task()
             print(self)
             self.speak_now()
-            time.sleep(1)
+            # time.sleep(1)
             clear_console()
             self.reset()
 
@@ -105,14 +110,19 @@ class Schedule:
     def reset(self):
         self.to_speak = []
 
-
+    def progress_bar(self, input_time):
+        total_time = 365 * 24 * 60 * 60
+        pbar = tqdm.tqdm(range(total_time))
+        pbar.update(total_time - input_time)
+        pbar.refresh()
 # THE USUAL
 if __name__ == "__main__":
     today = Schedule("MONISHWARAN MAHESWARAN", "SPRING 2022 WORK SCHEDULE")
     # today.add_task("On-Campus Book Return", [2022, 1, 17, 17, 0, 0])
     # today.add_task("Tennis Australian Open", [2022, 1, 17, 22, 0, 0])
     # today.add_task("Discussion Signup", [2022, 1, 17, 12, 0, 0])
-    today.add_task("CS70 HW 0", [2022, 1, 17, 23, 59, 59])
-    today.add_task("DATA C104 Syllabi", [2022, 1, 17, 23, 59, 59])
+    today.add_task("CS70 HW 1", [2022, 1, 24, 23, 59, 59])
+    today.add_task("EE16B Signup", [2022, 1, 18, 12, 0, 0])
+    today.add_task("DATA C104 Syllabi", [2022, 1, 18, 23, 59, 59])
     today.add_task("YC 2022 APP", [2022, 1, 31, 23, 59, 59])
     today.countdown()
