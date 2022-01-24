@@ -1,5 +1,6 @@
 import datetime
 import os
+import sys
 import time
 import pyttsx3
 import tqdm
@@ -92,13 +93,18 @@ class Schedule:
             i += 1
         return m_data + "\n" + curr_time  + "\n\n" + to_show
 
+    def dynamic_refresh(self):
+        dtext = self.__str__()
+        sys.stdout.write(dtext)
+        sys.stdout.flush()
+
     def countdown(self):
         while self.n_of_tasks > 0:
             self.do_countdown()
             self.delete_comp_task()
             print(self)
             self.speak_now()
-            # time.sleep(1)
+            time.sleep(1)
             clear_console()
             self.reset()
 
@@ -117,12 +123,13 @@ class Schedule:
         pbar.refresh()
 # THE USUAL
 if __name__ == "__main__":
-    today = Schedule("MONISHWARAN MAHESWARAN", "SPRING 2022 WORK SCHEDULE")
-    # today.add_task("On-Campus Book Return", [2022, 1, 17, 17, 0, 0])
-    # today.add_task("Tennis Australian Open", [2022, 1, 17, 22, 0, 0])
-    # today.add_task("Discussion Signup", [2022, 1, 17, 12, 0, 0])
+    today = Schedule("MONISH WARAN", "SPRING 2022 WORK SCHEDULE")
     today.add_task("CS70 HW 1", [2022, 1, 24, 23, 59, 59])
+    today.add_task("Math 104 HW 1", [2022, 2, 2, 23, 59, 59])
+    today.add_task("Math 104 HW 2", [2022, 2, 9, 23, 59, 59])
+    today.add_task("Math 104 HW 3", [2022, 2, 16, 23, 59, 59])
+    today.add_task("Math 104 HW 4", [2022, 2, 23, 23, 59, 59])
     today.add_task("EE16B Signup", [2022, 1, 18, 12, 0, 0])
-    today.add_task("DATA C104 Syllabi", [2022, 1, 18, 23, 59, 59])
-    today.add_task("YC 2022 APP", [2022, 1, 31, 23, 59, 59])
+    today.add_task("EE16B HW 00", [2022, 1, 24, 23, 59, 59])
+    today.add_task("DATA C104 Personal Reflection", [2022, 1, 22, 23, 59, 59])
     today.countdown()
