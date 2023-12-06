@@ -47,7 +47,6 @@ Here's a snapshot of the Day Scheduler in action:
 
 ![Day Scheduler Example Run](https://paper-attachments.dropboxusercontent.com/s_28708D72545886A725E5C1AAA908ACCFF1A01305E8184B2EADEB2763730EA4AE_1680857082987_Screen+Shot+2023-04-07+at+1.44.39+AM.png)
 
-*Note: The image link provided should be verified for accuracy and accessibility.*
 
 ## Acknowledgements
 
