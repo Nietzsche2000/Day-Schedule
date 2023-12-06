@@ -24,7 +24,7 @@ The `Schedule` class contains all the necessary fields for this program to work 
 1. The `self.tasks` contains the list of tasks that have been pushed on.
 2. A task is an abstract idea that is implemented as a list; it contains the name of the task and the corresponding end time. `[task_name, end_time]`
 
-
+```
     # USEFUL HELPER FUNCTIONS
     def task_display_time_remain(task_name, end_time):
         present = datetime.datetime.now()
@@ -47,7 +47,7 @@ The `Schedule` class contains all the necessary fields for this program to work 
         engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0') # WINDOWS
         engine.say(text)
         engine.runAndWait()
-
+```
 These are some useful helper functions. 
 
 1. The `def task_display_time_remain(task_name, end_time)` is responsible for making a task which will then be pushed on and kept track of.
